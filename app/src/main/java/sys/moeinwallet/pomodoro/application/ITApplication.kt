@@ -1,4 +1,4 @@
-package sys.moeinwallet.pomodoro
+package sys.moeinwallet.pomodoro.application
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

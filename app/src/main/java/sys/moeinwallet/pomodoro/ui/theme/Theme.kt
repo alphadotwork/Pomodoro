@@ -7,16 +7,16 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = ITBlue,
+    primaryVariant = ITDarkBlue,
+    secondary = ITBlue
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200,
-    background = ITLightGray
+    primary = ITBlue,
+    primaryVariant = ITDarkBlue,
+    secondary = ITBlue,
+    background = ITBackground
 
     /* Other default colors to override
     background = Color.White,
@@ -29,7 +29,7 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun PomodoroTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+fun PomodoroTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {

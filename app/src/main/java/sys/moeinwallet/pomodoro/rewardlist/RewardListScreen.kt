@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
@@ -27,9 +28,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import sys.moeinwallet.pomodoro.R
+import sys.moeinwallet.pomodoro.application.FullScreenDestinations
 import sys.moeinwallet.pomodoro.data.Reward
+import sys.moeinwallet.pomodoro.data.getIconByName
 import sys.moeinwallet.pomodoro.ui.ListBottomPadding
 import sys.moeinwallet.pomodoro.ui.theme.PomodoroTheme
 
@@ -37,23 +41,28 @@ import sys.moeinwallet.pomodoro.ui.theme.PomodoroTheme
 @ExperimentalAnimationApi
 @Composable
 @ExperimentalMaterialApi
-fun RewardListScreen() {
-    val viewModel: RewardListViewModel = hiltViewModel()
-    val dummyRewards: List<Reward>? by viewModel.dummyRewards.observeAsState()
-    ScreenContent(dummyRewards)
+fun RewardListScreen(
+    navController: NavHostController,
+    viewModel: RewardListViewModel = hiltViewModel(),
+) {
+    val dummyRewards: List<Reward>? by viewModel.dummyRewards.observeAsState(listOf())
+    ScreenContent(dummyRewards, onAddNewRewardClick = {
+        navController.navigate(FullScreenDestinations.AddEditRewardScreen.route)
+    })
 }
 
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
-private fun ScreenContent(dummyRewards: List<Reward>?) {
+private fun ScreenContent(
+    dummyRewards: List<Reward>?,
+    onAddNewRewardClick: () -> Unit,
+) {
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-
-                },
+                onClick = onAddNewRewardClick,
                 modifier = Modifier.padding(8.dp)
             ) {
                 Icon(Icons.Default.Add,
@@ -75,8 +84,8 @@ private fun ScreenContent(dummyRewards: List<Reward>?) {
             LazyColumn(contentPadding = PaddingValues(top = 8.dp,
                 start = 8.dp,
                 end = 8.dp,
-                bottom = ListBottomPadding), state = listState) {
-                items(dummyRewards!!) {
+                bottom = ListBottomPadding), state = listState, modifier = Modifier.fillMaxSize()) {
+                items(dummyRewards ?: listOf()) {
                     RewardItem(reward = it)
                 }
             }
@@ -110,15 +119,16 @@ private fun ScreenContent(dummyRewards: List<Reward>?) {
 private fun RewardItem(
     modifier: Modifier = Modifier, reward: Reward,
 ) {
-
     Card(modifier = modifier
         .fillMaxWidth()
         .padding(8.dp), onClick = {}) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(reward.icon, null, modifier = Modifier
+            Icon(
+                getIconByName(reward.iconName), null, modifier = Modifier
                 .padding(8.dp)
                 .size(48.dp)
-                .fillMaxWidth())
+                .fillMaxWidth()
+            )
             Column {
                 Text(text = reward.title,
                     fontWeight = FontWeight.Bold,
@@ -139,7 +149,7 @@ private fun RewardItem(
 private fun RewardItemPreview() {
     PomodoroTheme {
         Surface {
-            RewardItem(reward = Reward(icon = Icons.Default.Star,
+            RewardItem(reward = Reward(iconName = Icons.Default.Cake.name,
                 title = "title",
                 chanceInPercent = 5))
         }
@@ -153,20 +163,20 @@ private fun RewardItemPreview() {
 @Preview(name = "Light Mode", uiMode = UI_MODE_NIGHT_NO)
 @Composable
 private fun ScreenContentPreview() {
-
     PomodoroTheme {
         Surface {
             ScreenContent(listOf(
-                Reward(icon = Icons.Default.Star,
+                Reward(iconName = Icons.Default.Cake.name,
                     title = "title $1",
                     chanceInPercent = 1),
-                Reward(icon = Icons.Default.Star,
+                Reward(iconName = Icons.Default.Star.name,
                     title = "title $1",
                     chanceInPercent = 1),
-                Reward(icon = Icons.Default.Star,
+                Reward(iconName = Icons.Default.Cake.name,
                     title = "title $1",
                     chanceInPercent = 1),
-            ))
+            ),
+                onAddNewRewardClick = {},)
         }
     }
 }

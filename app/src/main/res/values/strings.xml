@@ -4,4 +4,11 @@
     <string name="reward_list">reward list</string>
     <string name="add_new_reward">add new reward</string>
     <string name="show_top">show top</string>
+    <string name="add_reward">add reward</string>
+    <string name="edit_reward">edit reward</string>
+    <string name="save_reward">save reward</string>
+    <string name="reward_name">reward name</string>
+    <string name="chance">chance</string>
+    <string name="add_edit_reward">add edit reward</string>
+    <string name="close">close</string>
 </resources>
